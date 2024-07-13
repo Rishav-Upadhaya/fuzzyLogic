@@ -6,8 +6,8 @@ This project uses fuzzy logic to monitor and control water quality parameters su
 
 1. [Installation](#installation)
 2. [Usage](#usage)
-3. [Project Structure](#project-structure)
-4. [Contributing](#contributing)
+3. [Algorithm](#algorithm)
+4. [Example Output](#example_ouput)
 
 ## Installation
 
@@ -53,8 +53,9 @@ To run the water quality monitoring simulation, you can use Jupyter Notebook or 
 
 3. Open the `water_quality_monitoring.ipynb` notebook and run the cells to see the simulation and visualizations.
 
-### Example Code
+## Algorithm
 
+1. Importing all the required libraries.
 
 ```python
 # Importing all the required libraries.
@@ -63,8 +64,9 @@ import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 ```
 
+2. Define the fuzzy variables (input and output)
+   
 ```python
-# Define the fuzzy variables (input and output)
 pH = ctrl.Antecedent(np.arange(0, 14, 1), 'pH')
 turbidity = ctrl.Antecedent(np.arange(0, 101, 1), 'turbidity')
 dissolved_oxygen = ctrl.Antecedent(np.arange(0, 11, 1), 'dissolved_oxygen')
@@ -73,40 +75,40 @@ neutralizer = ctrl.Consequent(np.arange(0, 101, 1), 'neutralizer')
 aeration = ctrl.Consequent(np.arange(0, 101, 1), 'aeration')
 ```
 
+3. Defining the membership functions
+   
 ```python
-# Define the membership functions for pH
+
 pH['low'] = fuzz.trimf(pH.universe, [0, 0, 7])
 pH['neutral'] = fuzz.trimf(pH.universe, [6, 7, 8])
 pH['high'] = fuzz.trimf(pH.universe, [7, 14, 14])
 
-# Define the membership functions for turbidity
 turbidity['low'] = fuzz.trimf(turbidity.universe, [0, 0, 50])
 turbidity['medium'] = fuzz.trimf(turbidity.universe, [25, 50, 75])
 turbidity['high'] = fuzz.trimf(turbidity.universe, [50, 100, 100])
 
-# Define the membership functions for dissolved oxygen
 dissolved_oxygen['low'] = fuzz.trimf(dissolved_oxygen.universe, [0, 0, 5])
 dissolved_oxygen['medium'] = fuzz.trimf(dissolved_oxygen.universe, [3, 5, 7])
 dissolved_oxygen['high'] = fuzz.trimf(dissolved_oxygen.universe, [5, 10, 10])
 
-# Define the membership functions for filtration
 filtration['low'] = fuzz.trimf(filtration.universe, [0, 0, 50])
 filtration['medium'] = fuzz.trimf(filtration.universe, [25, 50, 75])
 filtration['high'] = fuzz.trimf(filtration.universe, [50, 100, 100])
 
-# Define the membership functions for neutralizer
 neutralizer['low'] = fuzz.trimf(neutralizer.universe, [0, 0, 50])
 neutralizer['medium'] = fuzz.trimf(neutralizer.universe, [25, 50, 75])
 neutralizer['high'] = fuzz.trimf(neutralizer.universe, [50, 100, 100])
 
-# Define the membership functions for aeration
 aeration['low'] = fuzz.trimf(aeration.universe, [0, 0, 50])
 aeration['medium'] = fuzz.trimf(aeration.universe, [25, 50, 75])
 aeration['high'] = fuzz.trimf(aeration.universe, [50, 100, 100])
+
 ```
 
+4. Define the fuzzy rules
+
 ```python
-# Define the fuzzy rules
+
 rules = [
     ctrl.Rule(pH['low'] & turbidity['high'], (filtration['high'], neutralizer['high'])),
     ctrl.Rule(pH['neutral'] & turbidity['medium'], filtration['medium']),
@@ -152,7 +154,7 @@ neutralizer.view(sim=water_quality_simulation)
 aeration.view(sim=water_quality_simulation)
 ```
 
-### Example Output
+## Example Output
 
 After running the simulation, you should see printed results like:
 
